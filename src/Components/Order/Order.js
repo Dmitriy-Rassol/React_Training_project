@@ -51,7 +51,15 @@ const EmptyList = styled.div `
 `;
 
 
-export const Order = ({orders}) => {
+export const Order = ({orders, setOrders, setOpenItem}) => {
+
+    const deleteItem = index => {
+        const newOrders = [...orders];
+
+        newOrders.splice(index, 1);
+
+        setOrders(newOrders);
+    }
 
     const total = orders.reduce((result, order) =>
     TotalPriceItems(order) + result, 0);
@@ -59,13 +67,14 @@ export const Order = ({orders}) => {
     const totalCounter = orders.reduce((result, order) =>
     order.count + result, 0);
 
+
     return (
         <OrderStyled>
             <OrderTitle>ВАШ ЗАКАЗ</OrderTitle>
             <OrderContent>
                 { orders.length ?
                 <OrderList>
-                    {orders.map((order, index) => <OrderListItem order={order} key={index}/>)}
+                    {orders.map((order, index) => <OrderListItem deleteItem={deleteItem} order={order} key={index} index={index} setOpenItem={setOpenItem}/>)}
                 </OrderList> :
                 <EmptyList>Корзина пуста</EmptyList>
                 }
@@ -75,7 +84,7 @@ export const Order = ({orders}) => {
                 <span>{totalCounter}</span>
                 <TotalPrice>{formatCurrency(total)}</TotalPrice>
             </Total>
-            <ButtonCheckout>Добавить</ButtonCheckout>
+            <ButtonCheckout>Оформить</ButtonCheckout>
         </OrderStyled>
     )
 }

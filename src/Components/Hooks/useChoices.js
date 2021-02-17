@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-export function useChoices(openItem) {
+export function useChoices() {
 
-    const [choice, setChoice] = useState(openItem.choices);
+    const [choice, setChoice] = useState();
 
     function changeChoices(e) {
         setChoice(e.target.value);
