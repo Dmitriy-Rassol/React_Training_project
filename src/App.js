@@ -11,6 +11,7 @@ function App() {
 
   const openItem = useOpenItem();
   const orders = useOrders();
+
   return (
     <React.Fragment>
       <GlobalStyle/>

@@ -1,12 +1,15 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 import { ButtonCheckout } from '../Style/ButtonCheckout';
 import { CountItem } from './CountItem';
 import { useCount } from '../Hooks/UseCount';
-import {TotalPriceItems} from '../Functions/secondaryFunction';
-import {formatCurrency} from '../Functions/secondaryFunction';
+import { TotalPriceItems } from '../Functions/secondaryFunction';
+import { formatCurrency } from '../Functions/secondaryFunction';
 import { Toppings } from './Toppings';
 import { useToppings } from '../Hooks/useToppings';
+import { Choices } from './Choices';
+import { useChoices } from '../Hooks/useChoices';
 
 const Overlay = styled.div `
     position: fixed;
@@ -55,10 +58,11 @@ const TotalPriceItem = styled.div `
     justify-content: space-between;
 `;
 
-export const ModalItem = ({openItem, setOpenItem, orders, setOrders}) => {
+export const ModalItem = ({ openItem, setOpenItem, orders, setOrders }) => {
 
     const counter = useCount();
     const toppings = useToppings(openItem);
+    const choices = useChoices(openItem);
 
     const closeModal = (e) => {
         if(e.target.id === "overlay") {
@@ -69,30 +73,32 @@ export const ModalItem = ({openItem, setOpenItem, orders, setOrders}) => {
     const order = {
         ...openItem,
         count: counter.count,
-        topping: toppings.toppings
+        topping: toppings.toppings,
+        choice: choices.choice
     };
 
     const addToOrder = () => {
         setOrders([...orders, order])
-        console.log('safds');
         setOpenItem(null);
     }
 
     return (
         <Overlay id="overlay" onClick={closeModal}>
             <Modal>
-            <Banner img={openItem.img}/>
+            <Banner img={ openItem.img }/>
                 <Content>
                     <HeaderContent>
                         <div>
-                            {openItem.name}
+                            { openItem.name }
                         </div>
                         <div>
                             {formatCurrency(openItem.price)}
                         </div>
                     </HeaderContent>
                     <CountItem {...counter}/>
-                    {openItem.toppings &&  <Toppings {...toppings}/>}
+                    { openItem.toppings &&  <Toppings {...toppings}/> }
+                    { openItem.choices &&  <Choices {...choices} openItem={openItem}/> }
+
                     <TotalPriceItem>
                         <span>
                             Цена:
