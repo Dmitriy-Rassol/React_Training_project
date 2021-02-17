@@ -1,9 +1,10 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 import { ButtonCheckout } from '../Style/ButtonCheckout';
 import { OrderListItem } from './OrderListItem';
-import {TotalPriceItems} from '../Functions/secondaryFunction';
-import {formatCurrency} from '../Functions/secondaryFunction';
+import { TotalPriceItems } from '../Functions/secondaryFunction';
+import { formatCurrency } from '../Functions/secondaryFunction';
 
 const OrderStyled = styled.section `
     position: fixed;
@@ -28,7 +29,7 @@ const OrderContent = styled.div `
 `;
 
 const OrderList = styled.ul `
-    
+
 `;
 
 const Total = styled.div `
@@ -64,7 +65,7 @@ export const Order = ({orders}) => {
             <OrderContent>
                 { orders.length ?
                 <OrderList>
-                    {orders.map(order => <OrderListItem order={order}></OrderListItem>)}
+                    {orders.map((order, index) => <OrderListItem order={order} key={index}/>)}
                 </OrderList> :
                 <EmptyList>Корзина пуста</EmptyList>
                 }

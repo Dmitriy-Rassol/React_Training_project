@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 import trashImg from '../../image/trash.svg';
@@ -18,6 +19,7 @@ const TrashButton = styled.button `
 
 const OrderItemStyled = styled.li `
     display: flex;
+    flex-wrap: wrap;
     margin: 15px 0;
 `;
 
@@ -36,13 +38,24 @@ const ItemPrice = styled.span `
     text-align: right;
 `;
 
+const Toppings = styled.div `
+    color: #9a9a9a;
+    font-size: 14px;
+`;
+
 export const OrderListItem = ({order}) => {
+
+    const topping = order.topping.filter(item => item.checked)
+        .map(item => item.name)
+        .join(', ');
+
     return (
         <OrderItemStyled>
             <ItemName>{order.name}</ItemName>
             <ItemCount>{order.count}</ItemCount>
             <ItemPrice>{formatCurrency(TotalPriceItems(order))}</ItemPrice>
             <TrashButton/>
+            {topping && <Toppings>Допы: {topping}</Toppings>}
         </OrderItemStyled>
     )
 }
