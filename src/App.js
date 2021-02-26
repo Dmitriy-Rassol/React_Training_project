@@ -11,6 +11,9 @@ import { useOrders } from './Components/Hooks/useOrders';
 import { GlobalStyle } from './Components/Style/GlobalStyle';
 import { useAuth } from './Components/Hooks/useAuth';
 import { useTitle } from './Components/Hooks/useTitle';
+import { useDB } from "./Components/Hooks/useDB";
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyDhgkljvEG0cMV1vsl6Vzm0Gx8p3L-v_eM",
   authDomain: "mrdonalds-bf028.firebaseapp.com",
@@ -27,7 +30,10 @@ function App() {
   const auth = useAuth(firebase.auth);
   const openItem = useOpenItem();
   const orders = useOrders();
+  const database = firebase.database();
   useTitle(openItem.openItem);
+  const dbMenu = useDB(database);
+  console.log(dbMenu);
 
   return (
     <React.Fragment>
@@ -37,9 +43,9 @@ function App() {
         {...orders}
         {...openItem}
         {...auth}
-          firebaseDatabase={firebase.database}
+        database={database}
         />
-      <Menu {...openItem}/>
+      <Menu {...openItem} dbMenu={dbMenu}/>
       { openItem.openItem && <ModalItem {...openItem} {...orders}/> }
     </React.Fragment>
   );

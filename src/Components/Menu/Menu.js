@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ListItem } from './ListItem';
 import { Banner } from './Banner';
-import { useFetch } from '../Hooks/useFetch';
+//import { useFetch } from '../Hooks/useFetch';
 
 const MenuStyled = styled.main `
     background-color: #cccccc;
@@ -21,11 +21,10 @@ const H2 = styled.h2 `
     margin-bottom: 30px;
 `;
 
-export const Menu = ({setOpenItem}) => {
+export const Menu = ({setOpenItem, dbMenu}) => {
 
-    const res = useFetch();
-
-    const dbMenu = res.response;
+    // const res = useFetch();
+    // const dbMenu = res.response;
 
     return (
         <MenuStyled>
@@ -46,8 +45,9 @@ export const Menu = ({setOpenItem}) => {
                     setOpenItem={setOpenItem}
                 />
             </Section>
-            </> : res.error ?
-            <div>Oops! We have a problem, we are already solving it.</div> :
+            </> : 
+            // res.error ?
+            //<div>Oops! We have a problem, we are already solving it.</div> :
             <div>Loading...</div>}
         </MenuStyled>
     )
