@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import trashImg from '../../image/trash.svg';
 import {TotalPriceItems} from '../Functions/secondaryFunction';
@@ -21,6 +21,7 @@ const OrderItemStyled = styled.li `
     display: flex;
     flex-wrap: wrap;
     margin: 15px 0;
+    cursor: pointer;
 `;
 
 const ItemName = styled.span `
@@ -49,12 +50,14 @@ export const OrderListItem = ({order, index, deleteItem, setOpenItem}) => {
         .map(item => item.name)
         .join(', ');
 
+    const refDeleteButton = useRef(null);
+
     return (
-        <OrderItemStyled>
-            <ItemName onClick={() => setOpenItem({...order, index})}>{order.name} {order.choice}</ItemName>
+        <OrderItemStyled  onClick={(e) => e.target !== refDeleteButton.current && setOpenItem({...order, index})}>
+            <ItemName>{order.name} {order.choice}</ItemName>
             <ItemCount>{order.count}</ItemCount>
             <ItemPrice>{formatCurrency(TotalPriceItems(order))}</ItemPrice>
-            <TrashButton onClick={() => deleteItem(index)}/>
+            <TrashButton ref={refDeleteButton} onClick={() => deleteItem(index)}/>
             {topping && <Toppings>Допы: {topping}</Toppings>}
         </OrderItemStyled>
     )

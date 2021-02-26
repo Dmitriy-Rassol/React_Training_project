@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
@@ -5,6 +6,7 @@ import { ButtonCheckout } from '../Style/ButtonCheckout';
 import { OrderListItem } from './OrderListItem';
 import { TotalPriceItems } from '../Functions/secondaryFunction';
 import { formatCurrency } from '../Functions/secondaryFunction';
+import { projection} from '../Functions/secondaryFunction';
 
 const OrderStyled = styled.section `
     position: fixed;
@@ -50,14 +52,31 @@ const EmptyList = styled.div `
     text-align: center;
 `;
 
+const rulesData = {
+    name:['name'],
+    price: ['price'],
+    count: ['count'],
+    topping: ['topping', arr => arr.filter(obj => obj.checked).map(obj => obj.name),
+        arr => arr.length ? arr : 'no toppings'],
+    choice: ['choice', item => item ? item : 'no choices']
+}
 
-export const Order = ({orders, setOrders, setOpenItem}) => {
 
+export const Order = ({orders, setOrders, setOpenItem, authentication, logIn, firebaseDatabase}) => {
+    const dataBase = firebaseDatabase();
+
+    const sendOreder = () => {
+        const newOrder = orders.map(projection(rulesData));
+        dataBase.ref('orders').push().set({
+            nameClient: authentication.displayName,
+            email: authentication.email,
+            order: newOrder
+        });
+        setOrders([]);
+    }
     const deleteItem = index => {
         const newOrders = [...orders];
-
         newOrders.splice(index, 1);
-
         setOrders(newOrders);
     }
 
@@ -84,7 +103,13 @@ export const Order = ({orders, setOrders, setOpenItem}) => {
                 <span>{totalCounter}</span>
                 <TotalPrice>{formatCurrency(total)}</TotalPrice>
             </Total>
-            <ButtonCheckout>Оформить</ButtonCheckout>
+            <ButtonCheckout disabled={orders.length < 1} onClick={() => {
+                if (authentication) {
+                    sendOreder();
+                } else {
+                    logIn();
+                }
+            }}>Оформить</ButtonCheckout>
         </OrderStyled>
     )
 }

@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import styled from 'styled-components';
 import logoImg from '../../image/logo.svg';
@@ -45,6 +48,7 @@ const Button = styled.button `
     flex-wrap: wrap;
     align-self: center;
     cursor: pointer;
+    color: white;
 `;
 
 const ImgSign = styled.img `
@@ -53,26 +57,46 @@ const ImgSign = styled.img `
     margin-bottom: 3px;
 `;
 
-const H2 = styled.h2 `
-    font-family: Roboto;
-    font-size: 16px;
-    line-height: 19px;
-    color: #ffffff;
+const User = styled.div `
+    display: flex;
+    align-items: center;
+    text-align: center;
 `;
 
+const LogOut = styled.span `
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 700px;
+    margin-right: 30px;
+`;
 
+const Figure = styled.figure `
+    margin: 0 30px;
+`;
 
-export const NavBar = () => {
+export const NavBar = ({ authentication, logIn, logOut }) => {
     return (
         <NavBarStyled>
             <LogoSection>
                 <ImgLogo src={logoImg} alt="logo"/>
                 <H1>MrDonald's</H1>
             </LogoSection>
-            <Button>
-                <ImgSign src={signImg} alt='sign'/>
-                <H2>войти</H2>
+            {authentication ?
+            <User>
+                <Figure>
+                    <ImgSign src={signImg} alt={authentication.displayName}/>
+                    <figcaption>{authentication.displayName}</figcaption>
+                </Figure>
+                <LogOut title="выйти" onClick={logOut}>x</LogOut>
+            </User> :
+            <Button onClick={logIn}>
+                <Figure>
+                    <ImgSign src={signImg} alt='войти'/>
+                    <figcaption>войти</figcaption>
+                </Figure>
             </Button>
+            }
         </NavBarStyled>
     )
 }
