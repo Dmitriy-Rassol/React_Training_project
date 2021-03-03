@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, {useContext} from 'react';
+import {Context} from '../Functions/context';
 import styled from 'styled-components';
 import {formatCurrency} from '../Functions/secondaryFunction';
 
@@ -43,7 +44,10 @@ const Item = styled.li `
     }
 `;
 
-export const ListItem = ({itemList, setOpenItem}) => {
+export const ListItem = ({itemList}) => {
+    
+    const { openItem: {setOpenItem} } = useContext(Context);
+
     return (
         <React.Fragment>
             <List>
