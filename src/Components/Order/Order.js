@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import { ButtonCheckout } from '../Style/ButtonCheckout';
 import { OrderListItem } from './OrderListItem';
 import { TotalPriceItems } from '../Functions/secondaryFunction';
 import { formatCurrency } from '../Functions/secondaryFunction';
-import { projection} from '../Functions/secondaryFunction';
+import {Context} from '../Functions/context';
 
 const OrderStyled = styled.section `
     position: fixed;
@@ -21,7 +21,7 @@ const OrderStyled = styled.section `
     padding: 20px;
 `;
 
-const OrderTitle = styled.h2 `
+export const OrderTitle = styled.h2 `
     text-align: center;
     margin-bottom: 30px;
 `;
@@ -34,7 +34,7 @@ const OrderList = styled.ul `
 
 `;
 
-const Total = styled.div `
+export const Total = styled.div `
     display: flex;
     margin: 0 35px 30px;
     & span:first-child {
@@ -42,7 +42,7 @@ const Total = styled.div `
     }
 `;
 
-const TotalPrice = styled.span `
+export const TotalPrice = styled.span `
     text-align: right;
     min-width: 65px;
     margin-left: 20px;
@@ -52,28 +52,18 @@ const EmptyList = styled.div `
     text-align: center;
 `;
 
-const rulesData = {
-    name:['name'],
-    price: ['price'],
-    count: ['count'],
-    topping: ['topping', arr => arr.filter(obj => obj.checked).map(obj => obj.name),
-        arr => arr.length ? arr : 'no toppings'],
-    choice: ['choice', item => item ? item : 'no choices']
-}
 
+export const Order = () => {
 
-export const Order = ({orders, setOrders, setOpenItem, authentication, logIn, firebaseDatabase}) => {
-    const dataBase = firebaseDatabase();
+    const {auth} = useContext(Context);
+    const {authentication, logIn}  = auth;
+    const {openItem} = useContext(Context);
+    const {setOpenItem} = openItem;
+    const {ordersCard} = useContext(Context);
+    const {orders, setOrders} = ordersCard;
+    const {orderConfirm} = useContext(Context);
+    const {setOpenOrderConfirm} = orderConfirm;
 
-    const sendOreder = () => {
-        const newOrder = orders.map(projection(rulesData));
-        dataBase.ref('orders').push().set({
-            nameClient: authentication.displayName,
-            email: authentication.email,
-            order: newOrder
-        });
-        setOrders([]);
-    }
     const deleteItem = index => {
         const newOrders = [...orders];
         newOrders.splice(index, 1);
@@ -93,11 +83,18 @@ export const Order = ({orders, setOrders, setOpenItem, authentication, logIn, fi
             <OrderContent>
                 { orders.length ?
                 <OrderList>
-                    {orders.map((order, index) => <OrderListItem deleteItem={deleteItem} order={order} key={index} index={index} setOpenItem={setOpenItem}/>)}
+                    {orders.map((order, index) => <OrderListItem 
+                    deleteItem={deleteItem}
+                    order={order}
+                    key={index}
+                    index={index}
+                    />)}
                 </OrderList> :
                 <EmptyList>Корзина пуста</EmptyList>
                 }
             </OrderContent>
+            {orders.length ?
+            <>
             <Total>
                 <span>Итого</span>
                 <span>{totalCounter}</span>
@@ -105,11 +102,14 @@ export const Order = ({orders, setOrders, setOpenItem, authentication, logIn, fi
             </Total>
             <ButtonCheckout disabled={orders.length < 1} onClick={() => {
                 if (authentication) {
-                    sendOreder();
+                    setOpenOrderConfirm(true);
                 } else {
                     logIn();
                 }
             }}>Оформить</ButtonCheckout>
+            </> :
+            null
+            }
         </OrderStyled>
     )
 }

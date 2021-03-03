@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import logoImg from '../../image/logo.svg';
 import signImg from '../../image/sign.svg';
-
+import {Context} from '../Functions/context';
 
 const NavBarStyled = styled.header `
     position: fixed;
@@ -75,7 +75,9 @@ const Figure = styled.figure `
     margin: 0 30px;
 `;
 
-export const NavBar = ({ authentication, logIn, logOut }) => {
+export const NavBar = () => {
+    const {auth} = useContext(Context);
+    const { authentication, logIn, logOut } = auth;
     return (
         <NavBarStyled>
             <LogoSection>

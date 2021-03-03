@@ -21,7 +21,7 @@ const H2 = styled.h2 `
     margin-bottom: 30px;
 `;
 
-export const Menu = ({setOpenItem}) => {
+export const Menu = () => {
 
     const res = useFetch();
 
@@ -36,14 +36,12 @@ export const Menu = ({setOpenItem}) => {
                 <H2>Бургеры</H2>
                 <ListItem
                     itemList={dbMenu.burger}
-                    setOpenItem={setOpenItem}
                 />
             </Section>
             <Section>
                 <H2>Закуски / Напитки</H2>
                 <ListItem
                     itemList={dbMenu.other}
-                    setOpenItem={setOpenItem}
                 />
             </Section>
             </> : res.error ?

@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import styled from 'styled-components';
 import trashImg from '../../image/trash.svg';
 import {TotalPriceItems} from '../Functions/secondaryFunction';
 import {formatCurrency} from '../Functions/secondaryFunction';
+import { Context } from '../Functions/context';
 
 const TrashButton = styled.button `
     width: 24px;
@@ -44,7 +45,9 @@ const Toppings = styled.div `
     font-size: 14px;
 `;
 
-export const OrderListItem = ({order, index, deleteItem, setOpenItem}) => {
+export const OrderListItem = ({order, index, deleteItem}) => {
+
+    const { openItem: { setOpenItem } } = useContext(Context);
 
     const topping = order.topping.filter(item => item.checked)
         .map(item => item.name)
